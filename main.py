@@ -3,7 +3,7 @@ TTCS - Technion Text Column Summarization.
 
 Supervisor:
     - Professor Benny Kimelfeld
-        Email: bennykcs.technion.ac.il
+        Email: bennyk@cs.technion.ac.il
 
 Developers:
     - Omar Jaml
