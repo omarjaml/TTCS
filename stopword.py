@@ -18,4 +18,4 @@ def clear_stopwords(text_column, language):
 
     filtered_sentence = [w for w in word_tokens if w not in stop_words]
 
-    return filtered_sentence
+    return filtered_sentence, stop_words

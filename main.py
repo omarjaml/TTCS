@@ -46,16 +46,17 @@ def main():
     print("Please enter the language of the Dataset:\n")
     language = input()
 
-    filtered_text = clear_stopwords(column_text, language)
+    column_text = column_text[:100]
+    filtered_text, stop_words = clear_stopwords(column_text, language)
 
     text = " ".join(w for w in filtered_text)
 
-    wordcloud = WordCloud(max_words=100, stopwords=filtered_text, background_color="white", colormap="gist_rainbow").generate(text)
+    # wordcloud = WordCloud(max_words=100, background_color="white", colormap="gist_rainbow").generate(text)
 
 
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis("off")
-    plt.show()
+    # plt.imshow(wordcloud, interpolation='bilinear')
+    # plt.axis("off")
+    # plt.show()
 
     synonyms = []
 
@@ -75,7 +76,7 @@ def main():
 
     text = " ".join(w for w in filtered_text)
 
-    wordcloud = WordCloud(max_words=100, collocations=False, stopwords=filtered_text, background_color="white", colormap="gist_rainbow").generate(text)
+    wordcloud = WordCloud(max_words=100, collocations=False, stopwords=stop_words, background_color="white", colormap="gist_rainbow").generate(text)
 
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
