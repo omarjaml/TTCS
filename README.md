@@ -3,7 +3,7 @@
 
 ## Supervisor:
     - Professor Benny Kimelfeld
-        Email: bennykcs.technion.ac.il
+        Email: bennyk@cs.technion.ac.il
 ## Developers:
     - Omar Jaml
         Email: omar.jaml.96@gmail.com
