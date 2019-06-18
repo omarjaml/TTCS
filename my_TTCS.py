@@ -89,7 +89,7 @@ def update_stop_words():
 	return stop_words, table
 
 
-def clean_thousand_reviews(thousand_reviews, filtered_sentences, filtered_sentences_stripped, 
+def clean_n_reviews(thousand_reviews, filtered_sentences, filtered_sentences_stripped, 
                           reviews_str, uncleaned_reviews, stripped_total, stop_words, table):
 	for r in thousand_reviews:
 		if type(r) is not str:
@@ -139,20 +139,23 @@ def replace_syns(stripped):
 
 
 
-def show_wordclouds(reviews, stop_words, punc_table):
+def show_wordclouds(reviews, stop_words, punc_table, n_reviews_per_wordcloud=1000):
 	filtered_sentences = []
 	filtered_sentences_stripped = []
 	reviews_str = ""
 	uncleaned_reviews = []
 	stripped_total = []
 
+	if n_reviews_per_wordcloud == 0:
+		exit()
+
 	text = ""
-	for i in range(int(len(reviews)/1000)+1):
-		if i == (int(len(reviews)/1000) + 1):
-			temp_stripped = clean_thousand_reviews(reviews[1000*i:], filtered_sentences, filtered_sentences_stripped, 
+	for i in range(int(len(reviews)/n_reviews_per_wordcloud)+1):
+		if i == (int(len(reviews)/n_reviews_per_wordcloud) + 1):
+			temp_stripped = clean_n_reviews(reviews[n_reviews_per_wordcloud*i:], filtered_sentences, filtered_sentences_stripped, 
 									  reviews_str, uncleaned_reviews, stripped_total,stop_words, punc_table)
 		else:
-			temp_stripped = clean_thousand_reviews(reviews[1000*i:1000*(i+1)], filtered_sentences, filtered_sentences_stripped, 
+			temp_stripped = clean_n_reviews(reviews[n_reviews_per_wordcloud*i:n_reviews_per_wordcloud*(i+1)], filtered_sentences, filtered_sentences_stripped, 
 								  reviews_str, uncleaned_reviews, stripped_total,stop_words, punc_table)
 		replaced_words = replace_syns(temp_stripped)
 		stripped_total += replaced_words
@@ -248,31 +251,39 @@ def get_clusters_num():
 	n_clusster = input()
 	return n_clusster
 
+def get_reviews_num_per_wordcloud():
+	print("\nPlease enter number of reviews per wordcloud:")
+	n_reviews = input()
+	return n_reviews
+# def run():
 
-def main():
+def run(dataset_name, column_name):
+	
 	r_clusstered = {}
 	warnings.filterwarnings(action = 'ignore') 
 	
 	# Create CBOW model 
 	word2Vec_model = gensim.models.KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin', binary=True)  
 
-	dataset_name = get_dataset_name()
+	# dataset_name = get_dataset_name()
 	
-	column_name = get_column_name()
+	# column_name = get_column_name()
 	
 	reviews = get_reviews(dataset_name, column_name)
 
 	stop_words, punc_table = update_stop_words()
 	
-	filtered_sentences, filtered_sentences_stripped = show_wordclouds(reviews ,stop_words, punc_table)
+	n_reviews_per_wordcloud = int(get_reviews_num_per_wordcloud())
+
+	filtered_sentences, filtered_sentences_stripped = show_wordclouds(reviews ,stop_words, punc_table, n_reviews_per_wordcloud)
 
 	r_vectors = get_vectors(word2Vec_model, filtered_sentences)
 
-	n_clusster = get_clusters_num()
+	n_clusster = int(get_clusters_num())
 	cluster_reviews(stop_words, r_vectors, r_clusstered,filtered_sentences_stripped,n_clusster)	
 
 
 
-if __name__== "__main__":
-	main()
+# if __name__== "__main__":
+# 	main()
 
